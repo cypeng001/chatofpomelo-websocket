@@ -158,15 +158,24 @@ function showChat() {
 
 // query connector
 function queryEntry(uid, callback) {
+	console.log("queryEntry", uid);
 	var route = 'gate.gateHandler.queryEntry';
+
+	console.log("pomelo.init start", window.location.hostname, 3014);
 	pomelo.init({
 		host: window.location.hostname,
 		port: 3014,
 		log: true
 	}, function() {
+		console.log("pomelo.init end");
+
+		console.log("pomelo.request start", route, {
+			uid: uid
+		});
 		pomelo.request(route, {
 			uid: uid
 		}, function(data) {
+			console.log("pomelo.request result", route, data);
 			pomelo.disconnect();
 			if(data.code === 500) {
 				showError(LOGIN_ERROR);
@@ -214,6 +223,8 @@ $(document).ready(function() {
 		username = $("#loginUser").attr("value");
 		rid = $('#channelList').val();
 
+		console.log("login", username, rid);
+
 		if(username.length > 20 || username.length == 0 || rid.length > 20 || rid.length == 0) {
 			showError(LENGTH_ERROR);
 			return false;
@@ -226,16 +237,26 @@ $(document).ready(function() {
 
 		//query entry of connection
 		queryEntry(username, function(host, port) {
+			console.log("pomelo.init start", host, port);
 			pomelo.init({
 				host: host,
 				port: port,
 				log: true
 			}, function() {
+				console.log("pomelo.init end");
+
 				var route = "connector.entryHandler.enter";
+
+				console.log("pomelo.request start", route, {
+					username: username,
+					rid: rid
+				});
+
 				pomelo.request(route, {
 					username: username,
 					rid: rid
 				}, function(data) {
+					console.log("pomelo.request result", route, data);
 					if(data.error) {
 						showError(DUPLICATE_ERROR);
 						return;
@@ -256,12 +277,19 @@ $(document).ready(function() {
 		if(e.keyCode != 13 /* Return */ ) return;
 		var msg = $("#entry").attr("value").replace("\n", "");
 		if(!util.isBlank(msg)) {
+			console.log("pomelo.request start", route, {
+				rid: rid,
+				content: msg,
+				from: username,
+				target: target
+			});
 			pomelo.request(route, {
 				rid: rid,
 				content: msg,
 				from: username,
 				target: target
 			}, function(data) {
+				console.log("pomelo.request result", route, data);
 				$("#entry").attr("value", ""); // clear the entry field.
 				if(target != '*' && target != username) {
 					addMessage(username, target, msg);
