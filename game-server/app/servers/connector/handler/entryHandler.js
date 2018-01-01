@@ -17,7 +17,7 @@ var handler = Handler.prototype;
  * @return {Void}
  */
 handler.enter = function(msg, session, next) {
-	console.log("entryHandler_handler.enter1 msg:", msg);
+	console.log("entryHandler_handler.enter1 msg:", msg, session);
 	var self = this;
 	var rid = msg.rid;
 	var uid = msg.username + '*' + rid
@@ -65,8 +65,13 @@ handler.enter = function(msg, session, next) {
  *
  */
 var onUserLeave = function(app, session) {
+	console.log("entryHandler_onUserLeave1", session);
 	if(!session || !session.uid) {
 		return;
 	}
+
+	console.log("entryHandler_onUserLeave2_1 pre app.rpc.chat.chatRemote.kick", 
+		session.uid, app.get('serverId'), session.get('rid'))
 	app.rpc.chat.chatRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
+	console.log("entryHandler_onUserLeave2_2 post app.rpc.chat.chatRemote.kick"); 
 };

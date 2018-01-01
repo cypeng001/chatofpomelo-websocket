@@ -71,16 +71,25 @@ ChatRemote.prototype.get = function(name, flag) {
  *
  */
 ChatRemote.prototype.kick = function(uid, sid, name, cb) {
+	console.log("ChatRemote.prototype.kick1", uid, sid, name);
 	var channel = this.channelService.getChannel(name, false);
 	// leave channel
 	if( !! channel) {
+		console.log("ChatRemote.prototype.kick2_1 pre channel.leave");
 		channel.leave(uid, sid);
+		console.log("ChatRemote.prototype.kick2_2 post channel.leave");
 	}
 	var username = uid.split('*')[0];
 	var param = {
 		route: 'onLeave',
 		user: username
 	};
+
+	console.log("ChatRemote.prototype.kick3_1 pre channel.pushMessage", param);
 	channel.pushMessage(param);
+	console.log("ChatRemote.prototype.kick3_2 post channel.pushMessage");
+
+	console.log("ChatRemote.prototype.kick4_1 pre cb");
 	cb();
+	console.log("ChatRemote.prototype.kick4_2 post cb");
 };
