@@ -44,9 +44,11 @@ handler.enter = function(msg, session, next) {
 	});
 	session.on('closed', onUserLeave.bind(null, self.app));
 
-	console.log("entryHandler_handler.enter3_1 pre self.app.rpc.chat.chatRemote.add"); 
+	var serverId = self.app.get('serverId');
+
+	console.log("entryHandler_handler.enter3_1 pre self.app.rpc.chat.chatRemote.add", uid, serverId, rid, true); 
 	//put user into channel
-	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
+	self.app.rpc.chat.chatRemote.add(session, uid, serverId, rid, true, function(users){
 		console.log("entryHandler_handler.enter self.app.rpc.chat.chatRemote.add callback users:", users); 
 		next(null, {
 			users:users
