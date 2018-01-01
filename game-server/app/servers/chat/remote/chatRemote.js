@@ -17,19 +17,28 @@ var ChatRemote = function(app) {
  *
  */
 ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
+	console.log("ChatRemote.prototype.add1", uid, sid, name, flag);
 	var channel = this.channelService.getChannel(name, flag);
 	var username = uid.split('*')[0];
 	var param = {
 		route: 'onAdd',
 		user: username
 	};
+	console.log("ChatRemote.prototype.add2_1 pre channel.pushMessage(param)", param);
 	channel.pushMessage(param);
+	console.log("ChatRemote.prototype.add2_2 post channel.pushMessage(param)");
 
 	if( !! channel) {
+		console.log("ChatRemote.prototype.add3_1 pre channel.add(uid, sid)");
 		channel.add(uid, sid);
+		console.log("ChatRemote.prototype.add3_2 post channel.add(uid, sid)");
 	}
 
-	cb(this.get(name, flag));
+	var users = this.get(name, flag);
+
+	console.log("ChatRemote.prototype.add4_1 pre cb", users);
+	cb(users);
+	console.log("ChatRemote.prototype.add4_1 post cb");
 };
 
 /**

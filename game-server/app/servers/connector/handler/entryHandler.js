@@ -17,13 +17,17 @@ var handler = Handler.prototype;
  * @return {Void}
  */
 handler.enter = function(msg, session, next) {
+	console.log("entryHandler_handler.enter1 msg:", msg);
 	var self = this;
 	var rid = msg.rid;
 	var uid = msg.username + '*' + rid
+
 	var sessionService = self.app.get('sessionService');
+	var tmp = sessionService.getByUid(uid);
+	console.log("entryHandler_handler.enter2 essionService.getByUid(uid)", tmp);
 
 	//duplicate log in
-	if( !! sessionService.getByUid(uid)) {
+	if( !! tmp) {
 		next(null, {
 			code: 500,
 			error: true
@@ -40,12 +44,15 @@ handler.enter = function(msg, session, next) {
 	});
 	session.on('closed', onUserLeave.bind(null, self.app));
 
+	console.log("entryHandler_handler.enter3_1 pre self.app.rpc.chat.chatRemote.add"); 
 	//put user into channel
 	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
+		console.log("entryHandler_handler.enter self.app.rpc.chat.chatRemote.add callback users:", users); 
 		next(null, {
 			users:users
 		});
 	});
+	console.log("entryHandler_handler.enter3_2 post self.app.rpc.chat.chatRemote.add"); 
 };
 
 /**
