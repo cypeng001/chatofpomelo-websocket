@@ -192,6 +192,7 @@ $(document).ready(function() {
 
 	//wait message from the server.
 	pomelo.on('onChat', function(data) {
+		console.log("pomelo.on onChat", data);
 		addMessage(data.from, data.target, data.msg);
 		$("#chatHistory").show();
 		if(data.from !== username)
@@ -200,6 +201,7 @@ $(document).ready(function() {
 
 	//update user list
 	pomelo.on('onAdd', function(data) {
+		console.log("pomelo.on onAdd", data);
 		var user = data.user;
 		tip('online', user);
 		addUser(user);
@@ -207,6 +209,7 @@ $(document).ready(function() {
 
 	//update user list
 	pomelo.on('onLeave', function(data) {
+		console.log("pomelo.on onLeave", data);
 		var user = data.user;
 		tip('offline', user);
 		removeUser(user);
@@ -215,6 +218,7 @@ $(document).ready(function() {
 
 	//handle disconect message, occours when the client is disconnect with servers
 	pomelo.on('disconnect', function(reason) {
+		console.log("pomelo.on disconnect", reason);
 		showLogin();
 	});
 
