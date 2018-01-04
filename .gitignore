@@ -5,6 +5,9 @@ logs/*.log
 !.gitignore
 game-server/node_modules/*
 web-server/node_modules/*
+.idea
+game-server/.idea
+web-server/.idea
 .project
 .settings/
 **/*.svn
